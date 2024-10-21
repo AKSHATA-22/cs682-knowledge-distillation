@@ -2,11 +2,12 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import keras
+from utils.layers import *
 
 
 # Define the CNN model
 class TACNN(nn.Module):
-    def __init__(self):
+    def __init__(self, alpha, temperature):
         super(TACNN, self).__init__()
         # Example architecture
         self.conv1_1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(3,3), stride=1, padding=1)
@@ -32,6 +33,9 @@ class TACNN(nn.Module):
         self.activation_fn4 = nn.ReLU()# assuming input images are 32x32
         self.fc2 = nn.Linear(1024, 1000)
         self.classifier_activation = nn.Softmax()  # assuming 10 classes
+        
+        self.alpha = alpha
+        self.temperature = temperature
 
     def forward(self, x):
         x = self.activation_fn1_1(self.conv1_1(x))
@@ -55,3 +59,6 @@ class TACNN(nn.Module):
         x = self.classifier_activation(x)
         
         return x
+    
+    def risk(self, Y, teacher_preds, output):
+        return loss_l2(Y, output) + loss_kl_divergence(output, Y, teacher_preds, alpha=self.alpha, temperature=self.temperature)
