@@ -26,6 +26,7 @@ class TACNN(nn.Module):
         self.activation_fn3_1 = nn.ReLU()
         self.conv3_2 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=1, padding=1)
         self.activation_fn3_2 = nn.ReLU()
+        self.conv3_3 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=1, padding=1)
         self.maxPool3 = nn.MaxPool2d(kernel_size=(2,2), stride=(2,2))
         
         self.flatten_layer = nn.Flatten()
@@ -48,6 +49,7 @@ class TACNN(nn.Module):
 
         x = self.activation_fn3_1(self.conv3_1(x))
         x = self.activation_fn3_2(self.conv3_2(x))
+        x = self.activation_fn3_2(self.conv3_3(x))
         x = self.maxPool3(x)  
 
         x = self.flatten_layer(x)
