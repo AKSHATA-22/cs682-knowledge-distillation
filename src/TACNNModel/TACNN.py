@@ -4,12 +4,13 @@ import torch.nn.functional as F
 import keras
 from utils.layers import *
 
+## We should take the num of blocks as a hyper parameter, get a graph of the accuracies vs the num of blocks used for the TA - This will help us decide the size of TA
+
 
 # Define the CNN model
 class TACNN(nn.Module):
     def __init__(self, alpha, temperature):
         super(TACNN, self).__init__()
-        # Example architecture
         self.conv1_1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(3,3), stride=1, padding=1)
         self.activation_fn1_1 = nn.ReLU()
         self.conv1_2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=1, padding=1)
