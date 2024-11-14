@@ -1,6 +1,7 @@
 import torch.nn as nn
 
 from utils.HWGQQuantizer import quantize
+from utils.layers import *
 
 class VGG_CMTKD_Student(nn.Module):
     def __init__(self, alpha, beta, temperature, bit_width, cache_T1, cache_T2, pi1, pi2):
@@ -50,6 +51,7 @@ class VGG_CMTKD_Student(nn.Module):
         self.cache_T2 = cache_T2
         self.pi1 = pi1
         self.pi2 = pi2
+        self.inter_loss = 0
         
 
     def forward(self, x):
@@ -158,5 +160,9 @@ class VGG_CMTKD_Student(nn.Module):
         
         x = self.classifier_activation(x)
         
-        
+        self.inter_loss += l_feat
         return x
+    
+    def loss(self, labels, teacher_1_output, teacher_2_output, student_output):
+        combined_teacher_output = get_combined_teacher_output(teacher_1_output, teacher_2_output, self.pi1, self.pi2)
+        return self.alpha*(loss_l2(combined_teacher_output, labels) + loss_l2(student_output, labels)) + self.beta*(loss_kl_divergence_with_logits(student_output, labels, combined_teacher_output, self.temperature)) + self.inter_loss
