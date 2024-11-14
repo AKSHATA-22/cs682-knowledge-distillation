@@ -6,3 +6,7 @@ Solution:
 4. sudo systemctl enable nvidia-suspend.service
 5. sudo systemctl enable nvidia-resume.service
 6. sudo systemctl enable nvidia-hibernate.service
+
+
+Commands for conda:
+1. conda install conda-forge::tensorflow-datasets
