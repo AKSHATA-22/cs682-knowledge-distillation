@@ -16,8 +16,8 @@ def loss_kl_divergence(outputs, labels, teacher_outputs, alpha, temperature):
 def loss_kl_divergence_with_logits(student_output, labels, combined_teacher_output, temperature):
     z_t = combined_teacher_output
     z_s = student_output
-    z_t_c = z_t - z_t[labels]
-    z_s_c = z_s - z_s[labels]
+    z_t_c = z_t - z_t[torch.arange(len(labels)), labels].unsqueeze(1)
+    z_s_c = z_s - z_s[torch.arange(len(labels)), labels].unsqueeze(1)
     z = torch.min(z_t_c, z_s_c)
     
     p = F.softmax(z/temperature)
