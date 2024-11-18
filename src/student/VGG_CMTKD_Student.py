@@ -160,7 +160,7 @@ class VGG_CMTKD_Student(nn.Module):
         
         x = self.classifier_activation(x)
         
-        self.inter_loss += torch.sum(l_feat)
+        self.inter_loss += l_feat
         return x
     
     def loss(self, labels, teacher_1_output, teacher_2_output, student_output):
