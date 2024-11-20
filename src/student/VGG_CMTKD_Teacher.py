@@ -3,7 +3,7 @@ import torch
 from utils.HWGQQuantizer import quantize
 
 class VGG_CMTKD_Teacher(nn.Module):
-    def __init__(self, alpha, temperature, bit_width, num_of_classes, teacher_idx):
+    def __init__(self, bit_width, num_of_classes, teacher_idx):
         super(VGG_CMTKD_Teacher, self).__init__()
         
         # input - 64, 64, 3
@@ -68,8 +68,8 @@ class VGG_CMTKD_Teacher(nn.Module):
         self.fc3 = nn.Linear(4096, num_of_classes)
         
         
-        self.alpha = alpha
-        self.temperature = temperature
+        # self.alpha = alpha
+        # self.temperature = temperature
         self.bit_width = bit_width
         self.teacher_idx = teacher_idx
         #self.cache = {}
