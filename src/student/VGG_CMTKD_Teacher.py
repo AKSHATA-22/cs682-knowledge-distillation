@@ -1,5 +1,4 @@
 import torch.nn as nn
-import torch
 from utils.HWGQQuantizer import quantize
 
 class VGG_CMTKD_Teacher(nn.Module):
@@ -77,71 +76,71 @@ class VGG_CMTKD_Teacher(nn.Module):
     def forward(self, x):
         x = self.activation1_1(self.conv1_1(x))
         x = quantize(self.batchnorm1_1(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_1_1.pt")
-        # self.cache["conv1_1"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_1_1.pt")
+        self.cache["conv1_1"] = x
         x = self.activation1_2(self.conv1_2(x))
         x = quantize(self.batchnorm1_2(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_1_2.pt")
-        # self.cache["conv1_2"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_1_2.pt")
+        self.cache["conv1_2"] = x
         x = self.maxPool1(x)
         
         x = self.activation2_1(self.conv2_1(x))
         x = quantize(self.batchnorm2_1(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_2_1.pt")
-        # self.cache["conv2_1"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_2_1.pt")
+        self.cache["conv2_1"] = x
         x = self.activation2_2(self.conv2_2(x))
         x = quantize(self.batchnorm2_2(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_2_2.pt")
-        # self.cache["conv2_2"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_2_2.pt")
+        self.cache["conv2_2"] = x
         x = self.maxPool2(x)
         
         x = self.activation3_1(self.conv3_1(x))
         x = quantize(self.batchnorm3_1(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_3_1.pt")
-        # self.cache["conv3_1"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_3_1.pt")
+        self.cache["conv3_1"] = x
         x = self.activation3_2(self.conv3_2(x))
         x = quantize(self.batchnorm3_2(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_3_2.pt")
-        # self.cache["conv3_2"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_3_2.pt")
+        self.cache["conv3_2"] = x
         x = self.maxPool3(x)
 
         x = self.activation4_1(self.conv4_1(x))
         x = quantize(self.batchnorm4_1(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_4_1.pt")
-        # self.cache["conv4_1"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_4_1.pt")
+        self.cache["conv4_1"] = x
         x = self.activation4_2(self.conv4_2(x))
         x = quantize(self.batchnorm4_2(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_4_2.pt")
-        # self.cache["conv4_2"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_4_2.pt")
+        self.cache["conv4_2"] = x
         x = self.activation4_3(self.conv4_3(x))
         x = quantize(self.batchnorm4_3(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_4_3.pt")
-        # self.cache["conv4_3"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_4_3.pt")
+        self.cache["conv4_3"] = x
         x = self.maxPool4(x)
         
         x = self.activation5_1(self.conv5_1(x))
         x = quantize(self.batchnorm5_1(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_5_1.pt")
-        # self.cache["conv5_1"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_5_1.pt")
+        self.cache["conv5_1"] = x
         x = self.activation5_2(self.conv5_2(x))
         x = quantize(self.batchnorm5_2(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_5_2.pt")
-        # self.cache["conv5_2"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_5_2.pt")
+        self.cache["conv5_2"] = x
         x = self.activation5_3(self.conv5_3(x))
         x = quantize(self.batchnorm5_3(x), self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_5_3.pt")
-        # self.cache["conv5_3"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/conv_5_3.pt")
+        self.cache["conv5_3"] = x
         x = self.maxPool5(x)
         
         x = self.flatten_layer(x)
         x = self.activation_fc1(self.fc1(x))
         x = quantize(x, self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/fc1.pt")
-        # self.cache["fc1"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/fc1.pt")
+        self.cache["fc1"] = x
         x = self.activation_fc2(self.fc2(x))
         x = quantize(x, self.bit_width)
-        torch.save(x, f"cache/Teacher{self.teacher_idx}/fc2.pt")
-        # self.cache["fc2"] = x
+        # torch.save(x, f"cache/Teacher{self.teacher_idx}/fc2.pt")
+        self.cache["fc2"] = x
         x = self.fc3(x)
         x = quantize(x, self.bit_width)
         
