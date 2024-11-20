@@ -4,7 +4,7 @@ from utils.HWGQQuantizer import quantize
 from utils.layers import *
 
 class VGG_CMTKD_Student(nn.Module):
-    def __init__(self, alpha, beta, temperature, bit_width, pi1, pi2):
+    def __init__(self, alpha, beta, temperature, bit_width, pi1, pi2, num_of_classes):
         super(VGG_CMTKD_Student, self).__init__()
         
         # input - 64, 64, 3
@@ -62,17 +62,17 @@ class VGG_CMTKD_Student(nn.Module):
         self.flatten_layer = nn.Flatten()
         
         # input - 2048,
-        self.fc1 = nn.Linear(2048, 1024)  
+        self.fc1 = nn.Linear(25088, 4096)  
         self.activation_fc1 = nn.ReLU()
-        self.fc2 = nn.Linear(1024, 1024)  
+        self.fc2 = nn.Linear(4096, 4096)  
         self.activation_fc2 = nn.ReLU()
-        self.fc3 = nn.Linear(1024, 1000)
+        self.fc3 = nn.Linear(4096, num_of_classes)
         
         
         self.alpha = alpha
         self.temperature = temperature
         self.bit_width = bit_width
-        self.cache = {}
+        # self.cache = {}
         
         self.classifier_activation = nn.Softmax() 
         
@@ -89,7 +89,7 @@ class VGG_CMTKD_Student(nn.Module):
 
     def forward(self, x):
         pi1, pi2 = self.pi1,self.pi2
-        cache1, cache2 = self.cache_T1, self.cache_T2
+        # cache1, cache2 = self.cache_T1, self.cache_T2
         
         x = self.activation1_1(self.conv1_1(x))
         x = quantize(self.batchnorm1_1(x), self.bit_width)
@@ -97,7 +97,10 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_1_1.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_1_1.pt")
         F_T_11 = pi1 * cache1 + pi2 * cache2
-        l_feat = nn.functional.normalize(x - F_T_11)
+        # print(F_T_11.shape)
+        # print(x.shape)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_11))
+        # print(l_feat.shape)
 
         x = self.activation1_2(self.conv1_2(x))
         x = quantize(self.batchnorm1_2(x), self.bit_width)
@@ -105,7 +108,10 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_1_2.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_1_2.pt")
         F_T_12 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_12)
+        # print(F_T_12.shape)
+        # print(x.shape)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_12))
+        # l_feat += nn.functional.normalize(x - F_T_12)
 
         x = self.maxPool1_1(x)
         
@@ -115,7 +121,10 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_2_1.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_2_1.pt")
         F_T_21 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_21)
+        # print(F_T_21)
+        # print(x.shape)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_21))
+        # l_feat += nn.functional.normalize(x - F_T_21)
 
         x = self.activation2_2(self.conv2_2(x))
         x = quantize(self.batchnorm2_2(x), self.bit_width)
@@ -123,7 +132,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_2_2.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_2_2.pt")
         F_T_22 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_22)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_22))
+        # l_feat += nn.functional.normalize(x - F_T_22)
 
         x = self.maxPool2_1(x)
         
@@ -133,7 +143,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_3_1.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_3_1.pt")
         F_T_31 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_31)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_31))
+        # l_feat += nn.functional.normalize(x - F_T_31)
 
         x = self.activation3_2(self.conv3_2(x))
         x = quantize(self.batchnorm3_2(x), self.bit_width)
@@ -141,7 +152,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_3_2.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_3_2.pt")
         F_T_32 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_32)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_32))
+        # l_feat += nn.functional.normalize(x - F_T_32)
 
         x = self.maxPool3_1(x)
 
@@ -151,7 +163,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_4_1.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_4_1.pt")
         F_T_41 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_41)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_41))
+        # l_feat += nn.functional.normalize(x - F_T_41)
 
 
         x = self.activation4_2(self.conv4_2(x))
@@ -160,7 +173,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_4_2.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_4_2.pt")
         F_T_42 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_42)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_42))
+        # l_feat += nn.functional.normalize(x - F_T_42)
 
         x = self.activation4_3(self.conv4_3(x))
         x = quantize(self.batchnorm4_3(x), self.bit_width)
@@ -168,7 +182,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_4_3.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_4_3.pt")
         F_T_43 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_43)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_43))
+        # l_feat += nn.functional.normalize(x - F_T_43)
 
 
         x = self.maxPool4_1(x)
@@ -179,7 +194,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_5_1.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_5_1.pt")
         F_T_51 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_51)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_51))
+        # l_feat += nn.functional.normalize(x - F_T_51)
 
 
         x = self.activation5_2(self.conv5_2(x))
@@ -188,7 +204,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_5_2.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_5_2.pt")
         F_T_52 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_52)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_52))
+        # l_feat += nn.functional.normalize(x - F_T_52)
 
         x = self.activation5_3(self.conv5_3(x))
         x = quantize(self.batchnorm5_3(x), self.bit_width)
@@ -196,7 +213,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/conv_5_3.pt")
         cache2 = torch.load(f"cache/Teacher2/conv_5_3.pt")
         F_T_53 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_53)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_53))
+        # l_feat += nn.functional.normalize(x - F_T_53)
 
         x = self.maxPool5_1(x)
         
@@ -207,7 +225,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/fc1.pt")
         cache2 = torch.load(f"cache/Teacher2/fc1.pt")
         F_T_fc1 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_fc1)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_fc1))
+        # l_feat += nn.functional.normalize(x - F_T_fc1)
 
         x = self.activation_fc2(self.fc2(x))
         x = quantize(x, self.bit_width)
@@ -215,7 +234,8 @@ class VGG_CMTKD_Student(nn.Module):
         cache1 = torch.load(f"cache/Teacher1/fc2.pt")
         cache2 = torch.load(f"cache/Teacher2/fc2.pt")
         F_T_fc2 = pi1 * cache1 + pi2 * cache2
-        l_feat += nn.functional.normalize(x - F_T_fc2)
+        l_feat = torch.sum(nn.functional.normalize(x - F_T_fc2))
+        # l_feat += nn.functional.normalize(x - F_T_fc2)
 
         x = self.fc3(x)
         x = quantize(x, self.bit_width)
