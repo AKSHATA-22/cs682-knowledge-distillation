@@ -16,18 +16,23 @@ class StudentCNN(nn.Module):
         self.temperature = temperature
 
         self.network = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(3,3), stride=1, padding=1),
+            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3,3), stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(3,3), stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(2,2), stride=(2,2)),
+
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(3,3), stride=1, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=1, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=(2,2), stride=(2,2)),
-
+            
             nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(3,3), stride=1, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=1, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=(2,2), stride=(2,2)),
@@ -35,7 +40,7 @@ class StudentCNN(nn.Module):
             nn.AdaptiveAvgPool2d((14,14)),
 
             nn.Flatten(),
-            nn.Linear(50176, 4096),
+            nn.Linear(25088, 4096),
             nn.BatchNorm1d(4096),
             nn.ReLU(),
             nn.Linear(4096, 4096),
@@ -49,6 +54,6 @@ class StudentCNN(nn.Module):
 
 
     def risk(self, Y, ta_preds, output):
-        return loss_l2(Y, output) + loss_kl_divergence(output, Y, ta_preds, alpha=self.alpha, temperature=self.temperature)
+        return loss_kl_divergence(output, Y, ta_preds, alpha=self.alpha, temperature=self.temperature)
 
     

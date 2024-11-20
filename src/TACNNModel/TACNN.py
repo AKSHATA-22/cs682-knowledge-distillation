@@ -55,4 +55,4 @@ class TACNN(nn.Module):
     def forward(self, x):
         return self.network(x)
     def risk(self, Y, teacher_preds, output):
-        return loss_l2(outputs=output, labels=Y) + loss_kl_divergence(output, Y, teacher_preds, alpha=self.alpha, temperature=self.temperature)
+        return loss_kl_divergence(output, Y, teacher_preds, alpha=self.alpha, temperature=self.temperature)
