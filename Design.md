@@ -26,4 +26,12 @@ Technical Approach: Describe the methods you intend to apply to solve the given 
 Intermediate/Preliminary Results: State and evaluate your results upto the milestone.
 Submission: Please upload a PDF file to Gradescope. Please coordinate with your teammates and submit only under ONE of your accounts, and add your teammates on Gradescope.
 
- 
+ # Outputs:
+
+ Teacher VGG: 
+ 1. Best Validation Accuracy: 76.80
+ 2. Test Accuracy: 59.45
+
+ Teaching Assistant: 
+ 1. Best Validation Accuracy: 84.00
+ 2. Test Accuracy: 70.12

@@ -41,9 +41,9 @@ class TACNN(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=(2,2), stride=(2,2)),
             
-            nn.Linear(200704, 50176),
-            nn.BatchNorm1d(50176),
-            nn.ReLU(),
+            nn.AdaptiveAvgPool2d((14, 14)),
+            
+            nn.Flatten(),
             nn.Linear(50176, 4096),
             nn.BatchNorm1d(4096),
             nn.ReLU(),
@@ -55,4 +55,4 @@ class TACNN(nn.Module):
     def forward(self, x):
         return self.network(x)
     def risk(self, Y, teacher_preds, output):
-        return loss_l2(Y, output) + loss_kl_divergence(output, Y, teacher_preds, alpha=self.alpha, temperature=self.temperature)
+        return loss_l2(outputs=output, labels=Y) + loss_kl_divergence(output, Y, teacher_preds, alpha=self.alpha, temperature=self.temperature)
