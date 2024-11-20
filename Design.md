@@ -28,14 +28,14 @@ Submission: Please upload a PDF file to Gradescope. Please coordinate with your 
 
  # Outputs:
 
- Teacher VGG: 48 epochs
+    Teacher VGG: 48 epochs
  1. Best Validation Accuracy: 76.80
  2. Test Accuracy: 59.45
 
- Teaching Assistant: 40 epochs
+    Teaching Assistant: 40 epochs
  1. Best Validation Accuracy: 86.6
  2. Test Accuracy: 73.40
 
-  Student Model: 40 epochs
+    Student Model: 40 epochs
  1. Best Validation Accuracy: 84.6
  2. Test Accuracy: 67.62
