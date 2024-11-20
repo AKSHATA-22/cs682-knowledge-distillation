@@ -71,7 +71,7 @@ class VGG_CMTKD_Teacher(nn.Module):
         # self.temperature = temperature
         self.bit_width = bit_width
         self.teacher_idx = teacher_idx
-        #self.cache = {}
+        self.cache = {}
 
     def forward(self, x):
         x = self.activation1_1(self.conv1_1(x))
