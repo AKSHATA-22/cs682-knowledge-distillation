@@ -29,6 +29,8 @@ Submission: Please upload a PDF file to Gradescope. Please coordinate with your 
  # Outputs:
 
 ## BASELINE 1
+alpha = 0.5
+temperature = 3
 
     Teacher VGG: 48 epochs
  1. Best Validation Accuracy: 76.80
@@ -43,6 +45,8 @@ Submission: Please upload a PDF file to Gradescope. Please coordinate with your 
  2. Test Accuracy: 67.62
 
 ## BASELINE 2
+alpha = 1
+temperature = 3
 
    CMTKD Teacher VGG: 40 epochs
 1. Best Validation Accuracy: 83.9
