@@ -28,6 +28,8 @@ Submission: Please upload a PDF file to Gradescope. Please coordinate with your 
 
  # Outputs:
 
+## BASELINE 1
+
     Teacher VGG: 48 epochs
  1. Best Validation Accuracy: 76.80
  2. Test Accuracy: 59.45
@@ -39,3 +41,13 @@ Submission: Please upload a PDF file to Gradescope. Please coordinate with your 
     Student Model: 40 epochs
  1. Best Validation Accuracy: 84.6
  2. Test Accuracy: 67.62
+
+## BASELINE 2
+
+   CMTKD Teacher VGG: 40 epochs
+1. Best Validation Accuracy: 83.9
+2. Test Accuracy: 
+
+   CMTKD Student: 40 epochs
+1. Best Validation Accuracy: 84.7
+2. Test Accuracy: 67.45
