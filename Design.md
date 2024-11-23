@@ -55,3 +55,24 @@ temperature = 3
    CMTKD Student: 40 epochs
 1. Best Validation Accuracy: 84.7
 2. Test Accuracy: 67.45
+
+
+## CUSTOM ARCHITECTURE
+alpha=0.5
+temperature=3
+
+   Teacher VGG: 40 epochs
+1. Best Validation Accuracy: 83.9
+2. Test Accuracy: 
+
+   CMTKD TA1: 40 epochs
+1. Best Validation Accuracy: 84.7
+2. Test Accuracy: 67.45
+
+   CMTKD TA2: 41 epochs
+1. Best Validation Accuracy: 85.3
+2. Test Accuracy: 69.64
+
+   CMTKD Student:
+1. Best Validation Accuracy: 81.80
+2. Test Accuracy: 67.21
